@@ -10,9 +10,11 @@
 <style>
   :root{
     --ink:#23281f;
-    --stone:#e7e3d6;
-    --stone-light:#f2efe6;
+    --stone:#e2ded0;
+    --stone-light:#f0eee4;
     --sage:#4b5d46;
+    --sage-light:#c3d0b4;
+    --sage-tint:#eaeee0;
     --sage-deep:#333f30;
     --brass:#a9863f;
     --clay:#b97a63;
@@ -50,8 +52,9 @@
   nav a{
     font-size:14px;color:var(--ink);text-decoration:none;
     border:1px solid var(--ink);padding:9px 18px;border-radius:2px;
-    font-family:'Inter',sans-serif;
+    font-family:'Inter',sans-serif;transition:background .15s ease, border-color .15s ease;
   }
+  nav a:hover{background:var(--sage-light);border-color:var(--sage-light);}
 
   /* HERO */
   .hero{padding:64px 0 96px;}
@@ -90,14 +93,14 @@
   .form-status.err{color:var(--clay);}
 
   /* PROBLEM / SOLUTION strip */
-  .strip{background:var(--ink);color:var(--stone-light);padding:56px 0;}
+  .strip{background:var(--sage-tint);color:var(--ink);padding:56px 0;}
   .strip-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:48px;}
-  .strip h3{font-size:15px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.1em;font-weight:400;color:#9aa08c;margin-bottom:14px;}
-  .strip p{font-size:17px;color:#e8e4d8;max-width:420px;}
-  .strip .old{text-decoration:line-through;text-decoration-color:var(--clay);text-decoration-thickness:1.5px;opacity:.6;}
+  .strip h3{font-size:15px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.1em;font-weight:400;color:var(--sage-deep);margin-bottom:14px;}
+  .strip p{font-size:17px;color:#3a3f33;max-width:420px;}
+  .strip .old{text-decoration:line-through;text-decoration-color:var(--clay);text-decoration-thickness:1.5px;opacity:.65;}
 
   /* HOW IT WORKS */
-  .how{padding:96px 0;}
+  .how{padding:96px 0;background:var(--sage-tint);}
   .how-head{max-width:520px;margin-bottom:56px;}
   .how-head h2{font-size:34px;margin-top:14px;}
   .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;}
@@ -108,8 +111,13 @@
 
   /* GALLERY STRIP */
   .swatches{display:flex;gap:14px;padding:0 0 96px;}
-  .swatch{flex:1;aspect-ratio:1;border-radius:3px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:16px;}
-  .swatch span{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:.06em;}
+  .swatch{flex:1;aspect-ratio:1;border-radius:3px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:16px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);}
+  .swatch img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .swatch span{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.92);text-transform:uppercase;letter-spacing:.06em;text-shadow:0 1px 3px rgba(0,0,0,.4);position:relative;z-index:2;}
+  .swatch::after{content:'';position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,.4), rgba(0,0,0,0) 55%);z-index:1;}
+  .gallery-lead{max-width:520px;margin:0 0 28px;}
+  .gallery-lead h2{font-size:26px;}
+  .gallery-lead p{font-size:15px;color:#4a4f41;margin-top:8px;}
 
   /* FOOTER CTA */
   .final{background:var(--sage-deep);color:var(--stone-light);padding:88px 0;text-align:center;}
@@ -123,12 +131,30 @@
   footer{padding:28px 0;font-size:13px;color:#7a7f6e;text-align:center;}
 
   @media (max-width:760px){
-    .hero-grid{grid-template-columns:1fr;gap:40px;}
-    .hero h1{font-size:36px;}
-    .strip-grid{grid-template-columns:1fr;gap:32px;}
-    .steps{grid-template-columns:1fr;gap:28px;}
-    .swatches{flex-wrap:wrap;}
-    .swatch{flex:1 1 45%;}
+    nav{padding:18px 0;}
+    .hero{padding:36px 0 64px;}
+    .hero-grid{grid-template-columns:1fr;gap:36px;}
+    .hero h1{font-size:34px;}
+    .hero p.sub{font-size:16px;}
+    .wheel-box svg{width:260px;height:260px;}
+    .strip{padding:40px 0;}
+    .strip-grid{grid-template-columns:1fr;gap:28px;}
+    .how{padding:64px 0;}
+    .how-head h2{font-size:26px;}
+    .steps{grid-template-columns:1fr;gap:24px;}
+    .swatches{flex-wrap:wrap;gap:10px;}
+    .swatch{flex:1 1 calc(50% - 5px);aspect-ratio:auto;height:130px;}
+    .final{padding:56px 0;}
+    .final h2{font-size:28px;}
+  }
+
+  @media (max-width:420px){
+    .capture{flex-direction:column;max-width:100%;}
+    .capture input{padding:14px 14px;}
+    .capture button{padding:14px;width:100%;}
+    nav a{font-size:13px;padding:8px 14px;}
+    .logo{font-size:19px;}
+    .hero h1{font-size:29px;}
   }
 </style>
 </head>
@@ -155,12 +181,11 @@
       <p class="sub">Reseason sends this year's collection to your door for the season, then we pick it back up. No new box to buy, no bin taking over the attic.</p>
       <div class="hero-actions">
         <div>
-          <!-- SETUP: replace GOOGLE_FORM_ACTION_URL and ENTRY_ID_EMAIL below — see instructions in chat -->
           <form class="capture" id="hero-form" action="https://docs.google.com/forms/d/e/1FAIpQLSfh3LyKMoVYFK7YEWseGg4u3C6SR3M7bDl5PxV_2rpGJqgrrg/formResponse" method="POST" target="hidden_iframe">
             <input type="email" name="entry.173070329" required placeholder="you@email.com" id="hero-email">
             <button type="submit">Get early access</button>
           </form>
-          <div class="form-note">Founding members get first pick of the collection &amp; 20% off season one.</div>
+          <div class="form-note">Get notified when the new collection drops.</div>
           <div class="form-status" id="hero-status"></div>
         </div>
       </div>
@@ -237,11 +262,16 @@
 </section>
 
 <div class="wrap">
+  <div class="gallery-lead">
+    <div class="eyebrow">A peek at the rotation</div>
+    <h2>One season live. More on the way.</h2>
+    <p>Holiday is the first collection out the door — cozy neutrals, harvest, and outdoor sets are already in the works for seasons to come.</p>
+  </div>
   <div class="swatches">
-    <div class="swatch" style="background:#7c8a6d"><span>Sage Plaid</span></div>
-    <div class="swatch" style="background:#8f4b3e"><span>Cardinal Stripe</span></div>
-    <div class="swatch" style="background:#c9a45c"><span>Brass Check</span></div>
-    <div class="swatch" style="background:#3d4a63"><span>Winter Ink</span></div>
+    <div class="swatch"><img src="images/collection-holiday.png" alt="Holiday red plaid pillows by the fireplace"><span>Holiday</span></div>
+    <div class="swatch"><img src="images/collection-neutral.png" alt="Cozy neutral knit and velvet pillows"><span>Cozy Neutral</span></div>
+    <div class="swatch"><img src="images/collection-autumn.png" alt="Autumn knit pillows with pumpkins"><span>Harvest</span></div>
+    <div class="swatch"><img src="images/collection-outdoor.png" alt="Blue outdoor pillows on a rooftop patio"><span>Rooftop</span></div>
   </div>
 </div>
 
@@ -260,33 +290,27 @@
 
 <footer>Reseason — a seasonal decor rental concept. This page is a demand test.</footer>
 
-<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="handleIframeLoad()"></iframe>
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
 <script>
-// Forms post directly to Google Forms in a hidden iframe so the page never navigates away.
-// Google Forms doesn't return a readable response (cross-origin), so we optimistically
-// show a confirmation once the iframe finishes loading after a real submission.
-let iframeLoadCount = 0;
-
-function handleIframeLoad(){
-  iframeLoadCount++;
-  if (iframeLoadCount === 1) return; // first load is the blank initial iframe, ignore it
-  document.querySelectorAll('.form-status').forEach(function(el){
-    if (el.dataset.pending === '1') {
-      el.textContent = "You're on the list ✓ — thanks for joining!";
-      el.classList.add('ok');
-      el.dataset.pending = '0';
-    }
-  });
-}
+// Forms still POST to Google Forms in the background via the hidden iframe (so
+// responses land in your sheet), but the on-screen confirmation runs on a plain
+// timer instead of waiting on the iframe's load event — that event is unreliable
+// across browsers since Google's response is cross-origin, so a timer is more robust.
 
 function markPending(statusId, emailId){
   var status = document.getElementById(statusId);
   var email = document.getElementById(emailId);
   if (!email.value.trim()) { return false; }
+
   status.textContent = 'Joining…';
   status.className = 'form-status';
-  status.dataset.pending = '1';
+
+  setTimeout(function(){
+    status.textContent = 'Joined!';
+    status.classList.add('ok');
+  }, 2500);
+
   return true;
 }
 
